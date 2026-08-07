@@ -1,0 +1,261 @@
+---
+import StaffLayout from './StaffLayout.astro';
+
+interface Props {
+	title: string;
+	activeSection: string;
+	processArea: string;
+	processHref: string;
+	owner: string;
+	lastUpdated: string;
+	lastUpdatedISO: string;
+	documentType?: string;
+	summary?: string;
+	sourceHref?: string;
+}
+
+const {
+	title,
+	activeSection,
+	processArea,
+	processHref,
+	owner,
+	lastUpdated,
+	lastUpdatedISO,
+	documentType = 'Procedure',
+	summary,
+	sourceHref,
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+
+const linkTo = (path = '') =>
+	`${base}${path.replace(/^\/+/, '')}`;
+---
+
+<StaffLayout title={title} activeSection={activeSection}>
+	<div class="procedure-page">
+		<nav class="breadcrumbs" aria-label="Breadcrumb">
+			<ol>
+				<li>
+					<a href={base}>Home</a>
+				</li>
+
+				<li>
+					<span aria-hidden="true">/</span>
+
+					<a href={linkTo(processHref)}>
+						{processArea}
+					</a>
+				</li>
+
+				<li>
+					<span aria-hidden="true">/</span>
+
+					<span aria-current="page">
+						{title}
+					</span>
+				</li>
+			</ol>
+		</nav>
+
+		<article
+			class="procedure-card"
+			aria-labelledby="procedure-title"
+		>
+			<header class="procedure-header">
+				<div class="procedure-heading">
+					<p class="procedure-label">
+						{documentType}
+					</p>
+
+					<h1 id="procedure-title">
+						{title}
+					</h1>
+
+					{
+						summary && (
+							<p class="procedure-summary">
+								{summary}
+							</p>
+						)
+					}
+				</div>
+
+				{
+					sourceHref && (
+						<div class="procedure-tools">
+							<a
+								class="source-link"
+								href={sourceHref}
+							>
+								Open authoritative Google Doc
+							</a>
+						</div>
+					)
+				}
+
+				<dl class="procedure-meta">
+					<div>
+						<dt>Process area</dt>
+						<dd>{processArea}</dd>
+					</div>
+
+					<div>
+						<dt>Document owner</dt>
+						<dd>{owner}</dd>
+					</div>
+
+					<div>
+						<dt>Last updated</dt>
+						<dd>
+							<time datetime={lastUpdatedISO}>
+								{lastUpdated}
+							</time>
+						</dd>
+					</div>
+				</dl>
+			</header>
+
+			<div class="procedure-content">
+				<slot />
+			</div>
+		</article>
+	</div>
+</StaffLayout>
+
+<style>
+	.procedure-page {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.breadcrumbs {
+		font-size: 0.9rem;
+	}
+
+	.breadcrumbs ol {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.breadcrumbs li {
+		display: flex;
+		gap: 0.55rem;
+	}
+
+	.breadcrumbs a {
+		font-weight: 700;
+	}
+
+	.breadcrumbs [aria-current="page"] {
+		color: var(--muted);
+	}
+
+	.procedure-card {
+		overflow: hidden;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 0.8rem;
+	}
+
+	.procedure-header {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 1.5rem;
+		padding: 2rem;
+		border-top: 0.4rem solid var(--brand-teal);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.procedure-label {
+		margin: 0 0 0.5rem;
+		padding-left: 0.55rem;
+		border-left: 0.25rem solid var(--brand-coral);
+		color: var(--brand-blue);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.procedure-header h1 {
+		margin: 0;
+		color: var(--navy-dark);
+		font-size: clamp(2rem, 4vw, 3.25rem);
+		line-height: 1.1;
+	}
+
+	.procedure-summary {
+		max-width: 55rem;
+		margin: 1rem 0 0;
+		color: var(--muted);
+		font-size: 1.08rem;
+	}
+
+	.procedure-tools {
+		align-self: start;
+	}
+
+	.source-link {
+		display: inline-block;
+		padding: 0.75rem 1rem;
+		border: 2px solid var(--brand-blue);
+		border-radius: 0.4rem;
+		color: var(--brand-blue);
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.source-link:hover {
+		background: var(--brand-blue);
+		color: #ffffff;
+	}
+
+	.procedure-meta {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		padding-top: 1.25rem;
+		margin: 0;
+		border-top: 1px solid var(--border);
+	}
+
+	.procedure-meta div {
+		display: grid;
+		gap: 0.15rem;
+	}
+
+	.procedure-meta dt {
+		color: var(--muted);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.procedure-meta dd {
+		margin: 0;
+		color: var(--navy-dark);
+		font-weight: 700;
+	}
+
+	.procedure-content {
+		padding: 2rem;
+	}
+
+	@media (max-width: 62rem) {
+		.procedure-header {
+			grid-template-columns: 1fr;
+		}
+
+		.procedure-meta {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
