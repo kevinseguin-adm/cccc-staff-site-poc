@@ -1,0 +1,468 @@
+---
+import ProcessAreaLayout from '../../layouts/ProcessAreaLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+const linkTo = (path = '') => `${base}${path}`;
+
+const stages = [
+	{
+		title: 'Plan',
+		description: 'Identify staffing needs and approve the position.',
+	},
+	{
+		title: 'Recruit',
+		description: 'Prepare and distribute the job posting.',
+	},
+	{
+		title: 'Select',
+		description: 'Interview candidates and complete reference checks.',
+	},
+	{
+		title: 'Hire',
+		description: 'Approve the offer and complete hiring documentation.',
+	},
+	{
+		title: 'Orient',
+		description: 'Welcome and orient the new employee.',
+	},
+	{
+		title: 'Manage',
+		description: 'Support performance, development and role clarity.',
+	},
+	{
+		title: 'Retain',
+		description: 'Review compensation, growth and retention needs.',
+	},
+	{
+		title: 'Exit',
+		description: 'Manage resignations, terminations and offboarding.',
+	},
+];
+
+const procedureGroups = [
+	{
+		id: 'planning',
+		title: 'Workforce planning',
+		description:
+			'Resources used before recruitment formally begins.',
+		items: [
+			{
+				title: 'Position request and approval',
+				summary:
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+				type: 'Procedure',
+				href: linkTo('hr/position-approval/'),
+			},
+			{
+				title: 'Job description template',
+				summary:
+					'Praesent vitae mauris vel mauris tincidunt facilisis.',
+				type: 'Template',
+				href: linkTo('hr/job-description-template/'),
+			},
+			{
+				title: 'Compensation review',
+				summary:
+					'Donec consequat nisl sed neque malesuada posuere.',
+				type: 'Checklist',
+				href: linkTo('hr/compensation-review/'),
+			},
+		],
+	},
+	{
+		id: 'recruitment',
+		title: 'Recruitment and selection',
+		description:
+			'Procedures for finding, assessing and selecting candidates.',
+		items: [
+			{
+				title: 'Job posting and advertising',
+				summary:
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+				type: 'Procedure',
+				href: linkTo('hr/job-posting/'),
+			},
+			{
+				title: 'Interviewing candidates',
+				summary:
+					'Vivamus feugiat est non nisl faucibus consequat.',
+				type: 'Procedure',
+				href: linkTo('hr/interviewing/'),
+			},
+			{
+				title: 'Reference checks',
+				summary:
+					'Integer posuere est sed felis dignissim tincidunt.',
+				type: 'Checklist',
+				href: linkTo('hr/reference-checks/'),
+			},
+			{
+				title: 'Offer and approval',
+				summary:
+					'Aenean vel augue vitae lectus feugiat consequat.',
+				type: 'Procedure',
+				href: linkTo('hr/offer-approval/'),
+			},
+		],
+	},
+	{
+		id: 'onboarding',
+		title: 'Onboarding and orientation',
+		description:
+			'Resources for preparing, welcoming and orienting employees.',
+		items: [
+			{
+				title: 'Employee onboarding',
+				summary:
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+				type: 'Procedure',
+				href: linkTo('hr/onboarding/'),
+			},
+			{
+				title: 'First-week checklist',
+				summary:
+					'Suspendisse potenti nam cursus velit vitae felis.',
+				type: 'Checklist',
+				href: linkTo('hr/first-week-checklist/'),
+			},
+			{
+				title: 'Probation review',
+				summary:
+					'Pellentesque at lectus quis urna ultrices gravida.',
+				type: 'Template',
+				href: linkTo('hr/probation-review/'),
+			},
+		],
+	},
+	{
+		id: 'performance',
+		title: 'Performance and development',
+		description:
+			'Procedures for managing, reviewing and developing employees.',
+		items: [
+			{
+				title: 'Performance reviews',
+				summary:
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+				type: 'Procedure',
+				href: linkTo('hr/performance/'),
+			},
+			{
+				title: 'Promotion and role changes',
+				summary:
+					'Morbi consequat sem ut augue fermentum tempor.',
+				type: 'Procedure',
+				href: linkTo('hr/promotions/'),
+			},
+			{
+				title: 'Retention planning',
+				summary:
+					'Curabitur dignissim arcu sit amet nibh facilisis.',
+				type: 'Checklist',
+				href: linkTo('hr/retention/'),
+			},
+		],
+	},
+	{
+		id: 'departure',
+		title: 'Departure and offboarding',
+		description:
+			'Resources for voluntary and involuntary departures.',
+		items: [
+			{
+				title: 'Resignation and offboarding',
+				summary:
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+				type: 'Procedure',
+				href: linkTo('hr/offboarding/'),
+			},
+			{
+				title: 'Termination process',
+				summary:
+					'Nullam vitae est ut massa suscipit sollicitudin.',
+				type: 'Procedure',
+				href: linkTo('hr/termination/'),
+			},
+			{
+				title: 'Exit interview',
+				summary:
+					'Fusce porttitor sem nec justo faucibus faucibus.',
+				type: 'Template',
+				href: linkTo('hr/exit-interview/'),
+			},
+		],
+	},
+];
+---
+
+<ProcessAreaLayout
+	title="HR Processes"
+	activeSection="HR Processes"
+	owner="Human Resources"
+	lastUpdated="August 7, 2026"
+	lastUpdatedISO="2026-08-07"
+	description="Processes and supporting resources covering the complete employee lifecycle, from workforce planning and recruitment through onboarding, performance management, retention and departure."
+>
+	<section class="workflow-panel" aria-labelledby="workflow-heading">
+		<div class="section-heading">
+			<div>
+				<p class="section-label">At a glance</p>
+				<h2 id="workflow-heading">Employee lifecycle</h2>
+			</div>
+
+			<p>
+				Select the appropriate process group below to find
+				procedures, checklists and templates.
+			</p>
+		</div>
+
+		<ol class="stage-list">
+			{
+				stages.map((stage, index) => (
+					<li>
+						<span class="stage-number" aria-hidden="true">
+							{String(index + 1).padStart(2, '0')}
+						</span>
+
+						<h3>{stage.title}</h3>
+
+						<p>{stage.description}</p>
+					</li>
+				))
+			}
+		</ol>
+	</section>
+
+	<section class="library-panel" aria-labelledby="procedures-heading">
+		<div class="section-heading">
+			<div>
+				<p class="section-label">Document library</p>
+				<h2 id="procedures-heading">
+					Procedures and resources
+				</h2>
+			</div>
+
+			<p>
+				Placeholder documents are grouped by their role in the
+				employee lifecycle.
+			</p>
+		</div>
+
+		<div class="procedure-groups">
+			{
+				procedureGroups.map((group) => (
+					<section
+						class="procedure-group"
+						aria-labelledby={`${group.id}-heading`}
+					>
+						<header class="group-heading">
+							<h3 id={`${group.id}-heading`}>
+								{group.title}
+							</h3>
+
+							<p>{group.description}</p>
+						</header>
+
+						<ul>
+							{group.items.map((item) => (
+								<li>
+									<div class="procedure-copy">
+										<a href={item.href}>
+											{item.title}
+										</a>
+
+										<p>{item.summary}</p>
+									</div>
+
+									<span class="document-type">
+										{item.type}
+									</span>
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
+		</div>
+	</section>
+</ProcessAreaLayout>
+
+<style>
+	.workflow-panel,
+	.library-panel {
+		padding: 1.5rem;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 0.8rem;
+	}
+
+	.section-heading {
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 2rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.section-heading > p {
+		max-width: 32rem;
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.section-label {
+		margin: 0 0 0.25rem;
+		padding-left: 0.5rem;
+		border-left: 0.25rem solid var(--brand-teal);
+		color: var(--brand-blue);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.section-heading h2 {
+		margin: 0;
+		color: var(--navy-dark);
+		font-size: 1.65rem;
+	}
+
+	.stage-list {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 1rem;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.stage-list li {
+		min-height: 10rem;
+		padding: 1.1rem;
+		background: var(--brand-cream);
+		border-top: 0.3rem solid var(--brand-coral);
+		border-radius: 0.55rem;
+	}
+
+	.stage-number {
+		display: inline-block;
+		margin-bottom: 0.7rem;
+		color: var(--brand-purple);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+	}
+
+	.stage-list h3 {
+		margin: 0;
+		color: var(--navy-dark);
+		font-size: 1.05rem;
+	}
+
+	.stage-list p {
+		margin: 0.45rem 0 0;
+		color: var(--muted);
+		font-size: 0.9rem;
+	}
+
+	.procedure-groups {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.25rem;
+	}
+
+	.procedure-group {
+		overflow: hidden;
+		background: #ffffff;
+		border: 1px solid var(--border);
+		border-radius: 0.65rem;
+	}
+
+	.group-heading {
+		padding: 1.2rem;
+		background: var(--brand-blue-grey);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.group-heading h3 {
+		margin: 0;
+		color: var(--navy-dark);
+		font-size: 1.15rem;
+	}
+
+	.group-heading p {
+		margin: 0.35rem 0 0;
+		color: var(--muted);
+		font-size: 0.9rem;
+	}
+
+	.procedure-group ul {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.procedure-group li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 1rem;
+		align-items: start;
+		padding: 1rem 1.2rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.procedure-group li:first-child {
+		border-top: 0;
+	}
+
+	.procedure-copy a {
+		color: var(--brand-blue);
+		font-weight: 700;
+	}
+
+	.procedure-copy p {
+		margin: 0.25rem 0 0;
+		color: var(--muted);
+		font-size: 0.86rem;
+	}
+
+	.document-type {
+		padding: 0.25rem 0.5rem;
+		background: var(--brand-cream);
+		border-radius: 999px;
+		color: var(--navy-dark);
+		font-size: 0.7rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 78rem) {
+		.stage-list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.procedure-groups {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.section-heading {
+			display: grid;
+			gap: 0.75rem;
+		}
+
+		.stage-list {
+			grid-template-columns: 1fr;
+		}
+
+		.procedure-group li {
+			grid-template-columns: 1fr;
+		}
+
+		.document-type {
+			justify-self: start;
+		}
+	}
+</style>

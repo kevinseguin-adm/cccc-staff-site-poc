@@ -1,0 +1,169 @@
+---
+import StaffLayout from './StaffLayout.astro';
+
+interface Props {
+	title: string;
+	activeSection: string;
+	owner: string;
+	lastUpdated: string;
+	lastUpdatedISO: string;
+	description: string;
+	label?: string;
+}
+
+const {
+	title,
+	activeSection,
+	owner,
+	lastUpdated,
+	lastUpdatedISO,
+	description,
+	label = 'Process area',
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+---
+
+<StaffLayout title={title} activeSection={activeSection}>
+	<div class="process-page">
+		<nav class="breadcrumbs" aria-label="Breadcrumb">
+			<ol>
+				<li>
+					<a href={base}>Home</a>
+				</li>
+
+				<li>
+					<span aria-hidden="true">/</span>
+					<span aria-current="page">{title}</span>
+				</li>
+			</ol>
+		</nav>
+
+		<header class="process-header">
+			<div class="process-header-copy">
+				<p class="process-label">{label}</p>
+				<h1>{title}</h1>
+				<p class="process-description">{description}</p>
+			</div>
+
+			<dl class="process-meta">
+				<div>
+					<dt>Process owner</dt>
+					<dd>{owner}</dd>
+				</div>
+
+				<div>
+					<dt>Last updated</dt>
+					<dd>
+						<time datetime={lastUpdatedISO}>
+							{lastUpdated}
+						</time>
+					</dd>
+				</div>
+			</dl>
+		</header>
+
+		<slot />
+	</div>
+</StaffLayout>
+<style>
+	.process-page {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.breadcrumbs {
+		font-size: 0.9rem;
+	}
+
+	.breadcrumbs ol {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.breadcrumbs li {
+		display: flex;
+		gap: 0.55rem;
+	}
+
+	.breadcrumbs a {
+		font-weight: 700;
+	}
+
+	.breadcrumbs [aria-current="page"] {
+		color: var(--muted);
+	}
+    	.process-header {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(15rem, 22rem);
+		gap: 2rem;
+		align-items: start;
+		padding: 2rem;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-top: 0.4rem solid var(--brand-teal);
+		border-radius: 0.8rem;
+	}
+
+	.process-label {
+		margin: 0 0 0.5rem;
+		padding-left: 0.55rem;
+		border-left: 0.25rem solid var(--brand-coral);
+		color: var(--brand-blue);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.process-header h1 {
+		margin: 0;
+		color: var(--navy-dark);
+		font-size: clamp(2rem, 4vw, 3.25rem);
+		line-height: 1.1;
+	}
+
+	.process-description {
+		max-width: 55rem;
+		margin: 1rem 0 0;
+		color: var(--muted);
+		font-size: 1.08rem;
+	}
+
+	@media (max-width: 70rem) {
+		.process-header {
+			grid-template-columns: 1fr;
+		}
+	}
+    	.process-meta {
+		display: grid;
+		gap: 1rem;
+		padding: 1.25rem;
+		margin: 0;
+		background: var(--brand-cream);
+		border-radius: 0.6rem;
+	}
+
+	.process-meta div {
+		display: grid;
+		gap: 0.15rem;
+	}
+
+	.process-meta dt {
+		color: var(--muted);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.process-meta dd {
+		margin: 0;
+		color: var(--navy-dark);
+		font-weight: 700;
+	}
+</style>
