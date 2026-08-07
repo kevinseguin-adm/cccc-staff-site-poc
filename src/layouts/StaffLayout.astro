@@ -1,0 +1,656 @@
+---
+interface Props {
+	title?: string;
+	activeSection?: string;
+}
+
+const {
+	title = 'CCCC Staff Site',
+	activeSection = 'Home',
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const linkTo = (path = '') => `${base}${path}`;
+---
+
+<!doctype html>
+<html lang="en-CA">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<meta
+			name="description"
+			content="Proof of concept for the CCCC staff process and procedure library."
+		/>
+
+		<title>{title} | CCCC Staff</title>
+	</head>
+
+	<body>
+		<a class="skip-link" href="#main-content">
+			Skip to main content
+		</a>
+
+		<div class="site-shell">
+			<aside class="sidebar">
+				<div class="brand-block">
+					<a class="brand" href={linkTo()}>
+						CCCC Staff
+					</a>
+
+					<p>Process and procedure library</p>
+				</div>
+
+				<nav aria-label="Staff site navigation">
+					<a
+						class={activeSection === 'Home'
+							? 'nav-home is-active'
+							: 'nav-home'}
+						href={linkTo()}
+						aria-current={activeSection === 'Home'
+							? 'page'
+							: undefined}
+					>
+						Home
+					</a>
+
+					<p class="nav-label">Core processes</p>
+
+					<details
+						class="nav-group"
+						open={activeSection === 'HR Processes'}
+					>
+						<summary>HR Processes</summary>
+
+						<ul>
+							<li>
+								<details class="nav-subgroup">
+									<summary>Hiring</summary>
+
+									<ul>
+										<li>
+											<a href={linkTo('hr/job-posting/')}>
+												Job posting
+											</a>
+										</li>
+
+										<li>
+											<a href={linkTo('hr/interviewing/')}>
+												Interviewing
+											</a>
+										</li>
+
+										<li>
+											<a href={linkTo('hr/offer-approval/')}>
+												Offer and approval
+											</a>
+										</li>
+									</ul>
+								</details>
+							</li>
+
+							<li>
+								<a href={linkTo('hr/onboarding/')}>
+									Employee onboarding
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('hr/performance/')}>
+									Performance and retention
+								</a>
+							</li>
+						</ul>
+					</details>
+
+					<details
+						class="nav-group"
+						open={activeSection === 'Marketing Processes'}
+					>
+						<summary>Marketing Processes</summary>
+
+						<ul>
+							<li>
+								<a href={linkTo('marketing/campaigns/')}>
+									Campaign planning
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('marketing/eblasts/')}>
+									Eblasts
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('marketing/brand-resources/')}>
+									Brand resources
+								</a>
+							</li>
+						</ul>
+					</details>
+
+					<details
+						class="nav-group"
+						open={activeSection === 'Content Development'}
+					>
+						<summary>Content Development</summary>
+
+						<ul>
+							<li>
+								<a href={linkTo('content/blogs/')}>
+									Blog publishing
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('content/knowledge-base/')}>
+									Knowledge base
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('content/templates/')}>
+									Content templates
+								</a>
+							</li>
+						</ul>
+					</details>
+
+					<details
+						class="nav-group"
+						open={activeSection === 'Events'}
+					>
+						<summary>Events</summary>
+
+						<ul>
+							<li>
+								<a href={linkTo('events/webinars/')}>
+									Webinars
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('events/equipped/')}>
+									Equipped
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('events/templates/')}>
+									Event templates
+								</a>
+							</li>
+						</ul>
+					</details>
+
+					<details
+						class="nav-group"
+						open={activeSection === 'Member Support'}
+					>
+						<summary>Member Support</summary>
+
+						<ul>
+							<li>
+								<a href={linkTo('member-support/onboarding/')}>
+									New member onboarding
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('member-support/enquiries/')}>
+									Member enquiries
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('member-support/proactive/')}>
+									Proactive engagement
+								</a>
+							</li>
+						</ul>
+					</details>
+
+					<details
+						class="nav-group"
+						open={activeSection === 'Accounting Processes'}
+					>
+						<summary>Accounting Processes</summary>
+
+						<ul>
+							<li>
+								<a href={linkTo('accounting/budgets/')}>
+									Budget preparation
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('accounting/expenses/')}>
+									Expense approvals
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('accounting/payroll/')}>
+									Payroll
+								</a>
+							</li>
+						</ul>
+					</details>
+
+					<details
+						class="nav-group"
+						open={activeSection === 'Governance Processes'}
+					>
+						<summary>Governance Processes</summary>
+
+						<ul>
+							<li>
+								<a href={linkTo('governance/recruitment/')}>
+									Board recruitment
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('governance/meetings/')}>
+									Board meetings
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('governance/reporting/')}>
+									Board reporting
+								</a>
+							</li>
+						</ul>
+					</details>
+
+					<p class="nav-label">Other resources</p>
+
+					<details
+						class="nav-group"
+						open={activeSection === 'The Vault'}
+					>
+						<summary>The Vault</summary>
+
+						<ul>
+							<li>
+								<a href={linkTo('vault/it-policies/')}>
+									IT policies
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('vault/board-policies/')}>
+									Board policies
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('vault/meeting-minutes/')}>
+									Meeting minutes
+								</a>
+							</li>
+
+							<li>
+								<a href={linkTo('vault/member-types/')}>
+									Member types and tiers
+								</a>
+							</li>
+						</ul>
+					</details>
+				</nav>
+			</aside>
+
+			<div class="page-shell">
+				<header class="topbar">
+					<form
+						class="site-search"
+						role="search"
+						action={linkTo()}
+						method="get"
+					>
+						<label class="visually-hidden" for="global-search">
+							Search all procedures
+						</label>
+
+						<input
+							id="global-search"
+							name="q"
+							type="search"
+							placeholder="Search all procedures"
+						/>
+
+						<button type="submit">Search</button>
+					</form>
+
+					<div
+						class="profile-placeholder"
+						aria-label="Signed-in user placeholder"
+					>
+						KS
+					</div>
+				</header>
+
+				<main id="main-content" tabindex="-1">
+					<slot />
+				</main>
+
+				<footer class="site-footer">
+					Proof of concept — placeholder content only
+				</footer>
+			</div>
+		</div>
+	</body>
+
+<style is:global>
+	:root {
+				/* CCCC brand palette */
+		--brand-blue: #00507c;
+		--brand-blue-dark: #003b5c;
+		--brand-teal: #0085a0;
+		--brand-coral: #e45f4e;
+		--brand-purple: #69537b;
+		--brand-cream: #f8eed4;
+		--brand-blue-grey: #e6ebf1;
+
+		/* Shared interface colours */
+		--navy: var(--brand-blue);
+		--navy-dark: var(--brand-blue-dark);
+		--blue: var(--brand-blue);
+		--blue-light: var(--brand-cream);
+		--green: var(--brand-purple);
+		--border: #c5d0da;
+		--background: var(--brand-blue-grey);
+		--surface: #ffffff;
+		--text: #17212b;
+		--muted: #52616d;
+		--focus: var(--brand-coral);
+		--sidebar-width: 19rem;
+		font-family:
+			Arial,
+			Helvetica,
+			sans-serif;
+		color: var(--text);
+		background: var(--background);
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		margin: 0;
+		min-width: 20rem;
+		background: var(--background);
+		color: var(--text);
+		line-height: 1.5;
+	}
+
+	a {
+		color: var(--blue);
+	}
+
+	button,
+	input,
+	summary {
+		font: inherit;
+	}
+
+		:focus-visible {
+		outline: 3px solid var(--navy-dark);
+		outline-offset: 3px;
+		box-shadow: 0 0 0 6px var(--focus);
+	}
+
+	.sidebar :focus-visible {
+		outline-color: #ffffff;
+	}
+
+	.skip-link {
+		position: fixed;
+		top: 0.75rem;
+		left: 0.75rem;
+		z-index: 1000;
+		padding: 0.75rem 1rem;
+		border-radius: 0.35rem;
+		background: var(--surface);
+		color: var(--navy-dark);
+		font-weight: 700;
+		transform: translateY(-200%);
+	}
+
+	.skip-link:focus {
+		transform: translateY(0);
+	}
+
+	.site-shell {
+		display: grid;
+		grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+		min-height: 100vh;
+	}
+
+	.sidebar {
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		overflow-y: auto;
+		background: var(--navy);
+		color: #ffffff;
+		border-right: 1px solid var(--navy-dark);
+	}
+
+	.brand-block {
+		padding: 1.5rem;
+		border-bottom: 1px solid rgb(255 255 255 / 20%);
+	}
+
+	.brand {
+		display: inline-block;
+		color: #ffffff;
+		font-size: 1.45rem;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.brand-block p {
+		margin: 0.3rem 0 0;
+		color: rgb(255 255 255 / 75%);
+		font-size: 0.9rem;
+	}
+
+	.sidebar nav {
+		padding: 1rem 0.75rem 2rem;
+	}
+
+	.nav-home,
+	.nav-group summary,
+	.nav-group a {
+		border-radius: 0.35rem;
+		color: #ffffff;
+		text-decoration: none;
+	}
+
+	.nav-home {
+		display: block;
+		padding: 0.7rem 0.75rem;
+		font-weight: 700;
+	}
+
+	.nav-home:hover,
+	.nav-home.is-active {
+		background: rgb(255 255 255 / 15%);
+	}
+
+	.nav-label {
+		margin: 1.25rem 0.75rem 0.45rem;
+		color: rgb(255 255 255 / 65%);
+		font-size: 0.73rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.nav-group {
+		margin: 0.15rem 0;
+	}
+
+	.nav-group summary {
+		padding: 0.7rem 0.75rem;
+		cursor: pointer;
+		font-weight: 700;
+	}
+
+	.nav-group summary:hover {
+		background: rgb(255 255 255 / 12%);
+	}
+
+	.nav-group ul {
+		margin: 0.2rem 0 0.55rem 0.9rem;
+		padding-left: 1rem;
+		border-left: 1px solid rgb(255 255 255 / 25%);
+		list-style: none;
+	}
+
+	.nav-group li {
+		margin: 0.1rem 0;
+	}
+
+	.nav-group a {
+		display: block;
+		padding: 0.5rem 0.65rem;
+		color: rgb(255 255 255 / 88%);
+		font-size: 0.92rem;
+	}
+
+	.nav-group a:hover {
+		background: rgb(255 255 255 / 12%);
+		color: #ffffff;
+	}
+
+	.nav-subgroup summary {
+		padding: 0.5rem 0.65rem;
+		font-size: 0.92rem;
+		font-weight: 600;
+	}
+
+	.page-shell {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		min-width: 0;
+		min-height: 100vh;
+	}
+
+	.topbar {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 2rem;
+		background: rgb(255 255 255 / 96%);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.site-search {
+		display: flex;
+		flex: 1;
+		max-width: 52rem;
+	}
+
+	.site-search input {
+		flex: 1;
+		min-width: 0;
+		padding: 0.8rem 1rem;
+		border: 1px solid #9aa8b4;
+		border-right: 0;
+		border-radius: 999px 0 0 999px;
+		background: #ffffff;
+		color: var(--text);
+	}
+
+	.site-search button {
+		padding: 0.8rem 1.25rem;
+		border: 1px solid var(--blue);
+		border-radius: 0 999px 999px 0;
+		background: var(--blue);
+		color: #ffffff;
+		font-weight: 700;
+		cursor: pointer;
+	}
+
+	.site-search button:hover {
+		background: var(--navy-dark);
+	}
+
+	.profile-placeholder {
+		display: grid;
+		flex: 0 0 auto;
+		width: 2.75rem;
+		height: 2.75rem;
+		place-items: center;
+		border-radius: 50%;
+		background: var(--green);
+		color: #ffffff;
+		font-weight: 700;
+	}
+
+	main {
+		width: min(100%, 96rem);
+		padding: 2rem;
+	}
+
+	.site-footer {
+		padding: 1rem 2rem;
+		border-top: 1px solid var(--border);
+		color: var(--muted);
+		font-size: 0.85rem;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	@media (max-width: 56rem) {
+		.site-shell {
+			display: block;
+		}
+
+		.sidebar {
+			position: static;
+			width: 100%;
+			height: auto;
+			max-height: none;
+		}
+
+		.topbar {
+			position: static;
+			padding: 1rem;
+		}
+
+		main {
+			padding: 1rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+	}
+</style>
+</html>
