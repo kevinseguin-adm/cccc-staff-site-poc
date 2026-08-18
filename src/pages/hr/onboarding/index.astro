@@ -1,5 +1,64 @@
 ---
 import ProcedureLayout from '../../../layouts/ProcedureLayout.astro';
+
+const googleDocUrl =
+	'https://docs.google.com/document/d/e/2PACX-1vS42xjarlzorVRP1cEYNmR2cXsViTGzWf_VjlLTpFrdC2JcDmjaIJHomolp2Gd5-1LYwF41nzyLqbB5/pub';
+
+const response = await fetch(googleDocUrl);
+
+if (!response.ok) {
+	throw new Error(`Could not fetch Google Doc: ${response.status}`);
+}
+
+const html = await response.text();
+
+function cleanGoogleDocHtml(rawHtml: string) {
+	const bodyMatch = rawHtml.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+
+	if (!bodyMatch) {
+		return '<p>Google Doc content could not be loaded.</p>';
+	}
+
+	let content = bodyMatch[1];
+
+	// Start at the actual Google Doc content.
+	content = content.replace(
+		/^[\s\S]*?(<div id=["']contents["'][^>]*>)/i,
+		'$1'
+	);
+
+	// Remove scripts after the document content.
+	content = content.replace(
+		/<script[\s\S]*?<\/script>/gi,
+		''
+	);
+
+	// Remove broken images and empty image placeholders.
+	content = content
+		.replace(/<img\b[^>]*>/gi, '')
+		.replace(/<span\b[^>]*>\s*<\/span>/gi, '');
+
+	// Remove Google Docs footer paragraphs such as “Page  of”.
+	content = content.replace(
+		/<p\b[^>]*>\s*<span\b[^>]*>[\s\u00a0]*Page[\s\u00a0]*<\/span>\s*<span\b[^>]*>[\s\u00a0]*of[\s\u00a0]*<\/span>\s*<\/p>/gi,
+		''
+	);
+
+	// Repeatedly remove empty paragraphs, empty headings, and empty divs.
+	let previousContent = '';
+
+	while (previousContent !== content) {
+		previousContent = content;
+
+		content = content
+			.replace(/<(p|h[1-6])\b[^>]*>\s*<\/\1>/gi, '')
+			.replace(/<div\b[^>]*>\s*<\/div>/gi, '');
+	}
+
+	return content.trim();
+}
+
+const googleDocBody = cleanGoogleDocHtml(html);
 ---
 
 <ProcedureLayout
@@ -13,271 +72,12 @@ import ProcedureLayout from '../../../layouts/ProcedureLayout.astro';
 	documentType="Procedure"
 	summary="A placeholder process for preparing, welcoming and orienting a newly hired employee."
 >
-	<div class="procedure-body">
-		<nav class="page-contents" aria-labelledby="contents-heading">
-			<h2 id="contents-heading">On this page</h2>
 
-			<ul>
-				<li><a href="#purpose">Purpose</a></li>
-				<li><a href="#scope">Scope</a></li>
-				<li><a href="#responsibilities">Responsibilities</a></li>
-				<li><a href="#procedure">Procedure</a></li>
-				<li><a href="#checklist">Checklist</a></li>
-				<li><a href="#history">Change history</a></li>
-			</ul>
-		</nav>
-
-		<section
-			id="purpose"
-			class="procedure-section"
-			aria-labelledby="purpose-heading"
-		>
-			<h2 id="purpose-heading">Purpose</h2>
-
-			<p>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-				Suspendisse vitae nibh vitae mauris vulputate dignissim.
-				Integer vel lacus sed urna facilisis consequat.
-			</p>
-
-			<p>
-				This procedure provides a consistent framework for preparing
-				for a new employee’s arrival, completing required
-				administrative work and supporting the employee during the
-				first several weeks of employment.
-			</p>
-		</section>
-
-		<section
-			id="scope"
-			class="procedure-section"
-			aria-labelledby="scope-heading"
-		>
-			<h2 id="scope-heading">Scope</h2>
-
-			<p>
-				This placeholder procedure applies to all newly hired
-				employees. Department-specific orientation activities may be
-				added by the employee’s manager.
-			</p>
-
-			<aside class="callout" aria-labelledby="note-heading">
-				<h3 id="note-heading">Important</h3>
-
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-					Do not include confidential employee information in the
-					public proof of concept.
-				</p>
-			</aside>
-		</section>
-
-		<section
-			id="responsibilities"
-			class="procedure-section"
-			aria-labelledby="responsibilities-heading"
-		>
-			<h2 id="responsibilities-heading">Responsibilities</h2>
-
-			<div class="table-wrapper" tabindex="0">
-				<table>
-					<caption>
-						Onboarding responsibilities by role
-					</caption>
-
-					<thead>
-						<tr>
-							<th scope="col">Role</th>
-							<th scope="col">Responsibility</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<tr>
-							<th scope="row">Human Resources</th>
-							<td>
-								Prepare employment documentation, establish
-								the employee record and coordinate
-								organisation-wide orientation.
-							</td>
-						</tr>
-
-						<tr>
-							<th scope="row">Hiring manager</th>
-							<td>
-								Prepare the work plan, assign equipment,
-								schedule introductions and provide
-								role-specific training.
-							</td>
-						</tr>
-
-						<tr>
-							<th scope="row">Administration</th>
-							<td>
-								Coordinate workspace, access credentials,
-								building information and required equipment.
-							</td>
-						</tr>
-
-						<tr>
-							<th scope="row">New employee</th>
-							<td>
-								Complete required forms, attend orientation
-								and raise questions when instructions are
-								unclear.
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</section>
-
-		<section
-			id="procedure"
-			class="procedure-section"
-			aria-labelledby="procedure-heading"
-		>
-			<h2 id="procedure-heading">Procedure</h2>
-
-			<ol class="steps">
-				<li>
-					<h3>Prepare for the employee’s arrival</h3>
-
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing
-						elit. Confirm the start date, reporting relationship,
-						work location and required systems.
-					</p>
-
-					<ul>
-						<li>Confirm the approved start date.</li>
-						<li>Prepare the employee’s equipment.</li>
-						<li>Request required system access.</li>
-						<li>Create the first-week schedule.</li>
-					</ul>
-				</li>
-
-				<li>
-					<h3>Complete pre-employment administration</h3>
-
-					<p>
-						Praesent eget lectus id justo pellentesque posuere.
-						Send the required forms and instructions before the
-						employee’s first day.
-					</p>
-
-					<ul>
-						<li>Provide employment documentation.</li>
-						<li>Collect payroll and benefits information.</li>
-						<li>Confirm applicable policy acknowledgements.</li>
-					</ul>
-				</li>
-
-				<li>
-					<h3>Conduct the first-day orientation</h3>
-
-					<p>
-						Morbi feugiat, elit sed gravida facilisis, ipsum
-						ligula elementum neque, sed tempor mauris neque vitae
-						erat.
-					</p>
-
-					<ul>
-						<li>Welcome the employee.</li>
-						<li>Introduce immediate colleagues.</li>
-						<li>Review the role and first-week priorities.</li>
-						<li>Explain essential systems and resources.</li>
-					</ul>
-				</li>
-
-				<li>
-					<h3>Complete the first-week activities</h3>
-
-					<p>
-						Aliquam erat volutpat. Schedule required training,
-						team introductions and an initial check-in with the
-						hiring manager.
-					</p>
-				</li>
-
-				<li>
-					<h3>Review progress during the first month</h3>
-
-					<p>
-						Donec tincidunt metus quis lorem consequat, sed
-						lacinia enim luctus. Confirm that the employee has
-						received the information, access and support needed
-						to perform the role.
-					</p>
-				</li>
-			</ol>
-		</section>
-
-		<section
-			id="checklist"
-			class="procedure-section"
-			aria-labelledby="checklist-heading"
-		>
-			<h2 id="checklist-heading">Completion checklist</h2>
-
-			<p>
-				The following placeholder items should be confirmed by the
-				process owner:
-			</p>
-
-			<ul class="checklist">
-				<li>Employment documentation completed</li>
-				<li>Payroll information submitted</li>
-				<li>Equipment prepared and tested</li>
-				<li>System access confirmed</li>
-				<li>Policy orientation completed</li>
-				<li>First-week meetings scheduled</li>
-				<li>Thirty-day check-in scheduled</li>
-			</ul>
-		</section>
-
-		<section
-			id="history"
-			class="procedure-section"
-			aria-labelledby="history-heading"
-		>
-			<h2 id="history-heading">Change history</h2>
-
-			<div class="table-wrapper" tabindex="0">
-				<table>
-					<caption>
-						Changes made to this procedure
-					</caption>
-
-					<thead>
-						<tr>
-							<th scope="col">Date</th>
-							<th scope="col">Change</th>
-							<th scope="col">Approved by</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<tr>
-							<td>
-								<time datetime="2026-08-07">
-									August 7, 2026
-								</time>
-							</td>
-							<td>
-								Placeholder procedure created for the public
-								proof of concept.
-							</td>
-							<td>Human Resources</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</section>
-	</div>
+<div class="procedure-body google-doc-content" set:html={googleDocBody} />
 </ProcedureLayout>
 
 <style>
+    
 	.procedure-body {
 		max-width: 72rem;
 	}
@@ -448,7 +248,23 @@ import ProcedureLayout from '../../../layouts/ProcedureLayout.astro';
 		width: 13rem;
 		color: var(--navy-dark);
 	}
+	.google-doc-content {
+		padding-top: 0;
+	}
 
+	.google-doc-content #contents {
+		margin-top: 0 !important;
+		padding-top: 0 !important;
+	}
+
+	.google-doc-content #contents > *:first-child {
+		margin-top: 0 !important;
+		padding-top: 0 !important;
+	}
+
+	.google-doc-content img {
+		display: none !important;
+	}
 	@media (max-width: 48rem) {
 		.steps > li {
 			padding: 4.25rem 1rem 1rem;
@@ -458,5 +274,20 @@ import ProcedureLayout from '../../../layouts/ProcedureLayout.astro';
 			top: 1rem;
 			left: 1rem;
 		}
+	}
+    	:global(.google-doc-content #contents),
+	:global(.google-doc-content .doc-content) {
+		margin-top: 0 !important;
+		padding-top: 0 !important;
+	}
+
+	:global(.google-doc-content .doc-content > h1:first-child) {
+		margin-top: 0 !important;
+		padding-top: 0 !important;
+	}
+
+	:global(.google-doc-content .doc-content > h1:first-child span) {
+		margin-top: 0 !important;
+		padding-top: 0 !important;
 	}
 </style>
