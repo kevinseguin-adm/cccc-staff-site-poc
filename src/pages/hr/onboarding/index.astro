@@ -1,64 +1,12 @@
 ---
 import ProcedureLayout from '../../../layouts/ProcedureLayout.astro';
+import { fetchPublishedGoogleDocHtml } from '../../../lib/googleDocs';
 
 const googleDocUrl =
 	'https://docs.google.com/document/d/e/2PACX-1vS42xjarlzorVRP1cEYNmR2cXsViTGzWf_VjlLTpFrdC2JcDmjaIJHomolp2Gd5-1LYwF41nzyLqbB5/pub';
 
-const response = await fetch(googleDocUrl);
-
-if (!response.ok) {
-	throw new Error(`Could not fetch Google Doc: ${response.status}`);
-}
-
-const html = await response.text();
-
-function cleanGoogleDocHtml(rawHtml: string) {
-	const bodyMatch = rawHtml.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-
-	if (!bodyMatch) {
-		return '<p>Google Doc content could not be loaded.</p>';
-	}
-
-	let content = bodyMatch[1];
-
-	// Start at the actual Google Doc content.
-	content = content.replace(
-		/^[\s\S]*?(<div id=["']contents["'][^>]*>)/i,
-		'$1'
-	);
-
-	// Remove scripts after the document content.
-	content = content.replace(
-		/<script[\s\S]*?<\/script>/gi,
-		''
-	);
-
-	// Remove broken images and empty image placeholders.
-	content = content
-		.replace(/<img\b[^>]*>/gi, '')
-		.replace(/<span\b[^>]*>\s*<\/span>/gi, '');
-
-	// Remove Google Docs footer paragraphs such as “Page  of”.
-	content = content.replace(
-		/<p\b[^>]*>\s*<span\b[^>]*>[\s\u00a0]*Page[\s\u00a0]*<\/span>\s*<span\b[^>]*>[\s\u00a0]*of[\s\u00a0]*<\/span>\s*<\/p>/gi,
-		''
-	);
-
-	// Repeatedly remove empty paragraphs, empty headings, and empty divs.
-	let previousContent = '';
-
-	while (previousContent !== content) {
-		previousContent = content;
-
-		content = content
-			.replace(/<(p|h[1-6])\b[^>]*>\s*<\/\1>/gi, '')
-			.replace(/<div\b[^>]*>\s*<\/div>/gi, '');
-	}
-
-	return content.trim();
-}
-
-const googleDocBody = cleanGoogleDocHtml(html);
+const googleDocBody = await fetchPublishedGoogleDocHtml(googleDocUrl);
+---
 ---
 
 <ProcedureLayout
