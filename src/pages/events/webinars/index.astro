@@ -1,0 +1,38 @@
+---
+import ProcedureLayout from '../../../layouts/ProcedureLayout.astro';
+import { fetchPublishedGoogleDocHtml } from '../../../lib/googleDocs';
+
+const googleDocUrl =
+	'https://docs.google.com/document/d/e/2PACX-1vQTbXgQ_cxPuRLDwPXCqG3pnn_uiOaeX7_p657v_kM8P-h0QHTIuaOW1NIw6kfhB5guqklmOeU7vw5f/pub';
+
+const googleDocBody = await fetchPublishedGoogleDocHtml(googleDocUrl);
+---
+
+<ProcedureLayout
+	title="Webinar planning"
+	activeSection="Events"
+	processArea="Events"
+	processHref="events/"
+	owner="Administration"
+	lastUpdated="August 19, 2026"
+	lastUpdatedISO="2026-08-19"
+	documentType="Procedure"
+	summary="A placeholder procedure for planning, preparing, delivering and following up on staff-supported webinars."
+>
+	<div class="procedure-body google-doc-content" set:html={googleDocBody} />
+</ProcedureLayout>
+
+<style>
+	:global(.google-doc-content #contents),
+	:global(.google-doc-content .doc-content) {
+		margin-top: 0 !important;
+		padding-top: 0 !important;
+	}
+
+	:global(.google-doc-content .doc-content > h1:first-child),
+	:global(.google-doc-content .doc-content > h1:first-child span),
+	:global(.google-doc-content .doc-content > *:first-child) {
+		margin-top: 0 !important;
+		padding-top: 0 !important;
+	}
+</style>
